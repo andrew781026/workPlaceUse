@@ -20,7 +20,14 @@
 <script type="text/javascript" src="js/new_app.js"></script>
 
 </head>
-<body ng-app="dateInputExample">
+<body ng-app="dateInputExample" >
+
+   <div ng-controller="hrefController as hrefCtrl" >
+	   	 	<span ng-click="hrefCtrl.lastMonth()" >上個月</span>
+	   		力科製令未交明細行事曆<%=cal.get(Calendar.YEAR) %>年<%=cal.get(Calendar.MONTH)+1 %>月   
+	   		<a href='hrefCtrl.nextMonth()'>下個月</a>
+	   </div>
+
 
 <table ng-controller="myDateController as dateCtrl" border="1" cellspacing="1" bordercolor="#CCCCCC" width="100%" style="border-collapse: collapse" >
             

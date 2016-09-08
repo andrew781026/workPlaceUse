@@ -74,7 +74,7 @@ public class ManufacInfoDao implements IManufacInfo ,AutoCloseable{
 				String productName =rs.getString(7);
 				int orderAmount = rs.getInt(5) ; 
 				int makedAmount = rs.getInt(6);				
-				int date =rs.getInt(3);			
+				int date =rs.getInt(3);		// 預計完工日	
 								
 				ManufacOrderInfo mOrderInfo = new ManufacOrderInfo(orderID , productID , unit , productName , orderAmount , makedAmount , date );
 				

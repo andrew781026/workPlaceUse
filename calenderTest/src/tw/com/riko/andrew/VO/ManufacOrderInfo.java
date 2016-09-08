@@ -1,7 +1,5 @@
 package tw.com.riko.andrew.VO;
 
-import java.io.UnsupportedEncodingException;
-import java.util.Base64;
 
 public class ManufacOrderInfo {
 	private String orderID , productID , unit ,productName;

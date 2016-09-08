@@ -117,6 +117,17 @@ var dateInputExample = angular
 
 						} ]);
 
+
+dateInputExample.factory();
+
+dateInputExample.controller('hrefController',	[ function() {
+	var self = this ;
+	self.lastMonth = function() {
+		self.dateString = $location.search().date ;
+	}
+}]);
+
+
 function dateFormat(format, date) {
 	var dayString;
 	if (format === "yyyyMMdd")
