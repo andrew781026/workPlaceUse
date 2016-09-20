@@ -21,42 +21,43 @@
 
 </head>
 <body ng-app="dateInputExample" >
-
-   <div ng-controller="hrefController as hrefCtrl" >
-	   	 	<span ng-click="hrefCtrl.lastMonth()" >上個月</span>
-	   		力科製令未交明細行事曆<%=cal.get(Calendar.YEAR) %>年<%=cal.get(Calendar.MONTH)+1 %>月   
-	   		<a href='hrefCtrl.nextMonth()'>下個月</a>
+<div ng-controller="myDateController as dateCtrl" >
+	   <div>
+	   	 	<button ng-click="dateCtrl.lastMonth()" >上個月</button>
+	   		力科製令未交明細行事曆
+	   		<button ng-click="dateCtrl.nextMonth()" >下個月</button>
 	   </div>
 
 
-<table ng-controller="myDateController as dateCtrl" border="1" cellspacing="1" bordercolor="#CCCCCC" width="100%" style="border-collapse: collapse" >
-            
-	<thead>
-		<tr style="font-size:20px;">
-			<th ng-repeat="string in dateCtrl.weekString" >
-				<span ng-bind="string" ng-style="dateCtrl.holidayOrNot(string)" ></span>
-			</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr ng-repeat="weekDay in dateCtrl.weekDays" valign="top" >
-			<td ng-repeat="day in weekDay track by $index">
-				<div ng-if="dateCtrl.dayInMonthOrNot(dateCtrl.year,dateCtrl.month,day)"> 
-					<div align="center" style="background-color: pink;font-size:16px;" ng-bind="day | date:'yyyy/MM/dd'" ></div>
-					<div ng-show="dateCtrl.checkHaveDataOrNot"><img src="img/loading.gif">資料讀取中...</div>
-                         	<div ng-hide="dateCtrl.checkHaveDataOrNot">
-	                                  <div style="font-size:1em;">未完工製令：</div>
-	                                  <div style="font-size:0.7em;" ng-repeat="data in dateCtrl.orderInfos | filter:dateCtrl.filterOptions(day) ">                                           			
-	                                        [<span style="color:red;">{{data.productName}}</span>] 未交數量：{{data.orderAmount-data.makedAmount}}{{data.unit}}<br><br>
-	                                  </div> 
-                            </div> 
-                </div> 
-			</td>
-		</tr>
-	</tbody>
+	<table border="1" cellspacing="1" bordercolor="#CCCCCC" width="100%" style="border-collapse: collapse" >
+	            
+		<thead>
+			<tr style="font-size:20px;">
+				<th ng-repeat="string in dateCtrl.weekString" ng-style="dateCtrl.width(string)" >
+					<span ng-bind="string" ng-style="dateCtrl.holidayOrNot(string)"></span>
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="weekDay in dateCtrl.weekDays" valign="top" >
+				<td ng-repeat="day in weekDay track by $index">
+					<div ng-if="dateCtrl.dayInMonthOrNot(dateCtrl.year,dateCtrl.month,day)"> 
+						<div align="center" style="background-color: pink;font-size:16px;" ng-bind="day | date:'yyyy/MM/dd'" ></div>
+						<div ng-show="dateCtrl.checkHaveDataOrNot"><img src="img/loading.gif">資料讀取中...</div>
+	                         	<div ng-hide="dateCtrl.checkHaveDataOrNot">
+		                                  <div style="font-size:1em;">未完工製令：</div>
+		                                  <div style="font-size:0.7em;" ng-repeat="data in dateCtrl.orderInfos | filter:dateCtrl.filterOptions(day) ">                                           			
+		                                        [<span style="color:red;">{{data.productName}}</span>] 未交數量：{{data.orderAmount-data.makedAmount}}{{data.unit}}<br><br>
+		                                  </div> 
+	                            </div> 
+	                </div> 
+				</td>
+			</tr>
+		</tbody>
+	
+	</table>
 
-</table>
-
+</div>
 
 </body>
 </html>

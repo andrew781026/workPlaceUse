@@ -19,6 +19,7 @@ var dateInputExample = angular
 								self.dateString = dateFormat("yyyyMMdd", self.date);
 								$location.search('date', self.dateString);
 								console.log('year>>',self.year,'month>>',self.month);
+								console.log(self.year+''+(self.month+1)+''+'01');
 							}else{
 								self.year = parseInt(self.dateString.substring(0,4));
 								self.month = parseInt(self.dateString.substring(4,6))-1;								
@@ -41,7 +42,7 @@ var dateInputExample = angular
 								orderAmount : 10,
 								makedAmount : 5,
 								unit : 'pcs',
-								date : '20160901'
+								date : '2016'+self.dateString.substring(4,6)+'01'
 							}, {
 								id : '20160722000015',
 								productID : 'A0010010004',
@@ -49,18 +50,19 @@ var dateInputExample = angular
 								orderAmount : 1000,
 								makedAmount : 500,
 								unit : 'pcs',
-								date : '20160905'
+								date : '2016'+self.dateString.substring(4,6)+'05'
 							} ];
 
 							// self.orderInfos = [] ;
 
 							self.checkHaveDataOrNot = self.orderInfos.length == 0;
 
-							var getOrderInfos = function() {
+							var getOrderInfos = function(dateString) {
+								// var dateString = dateFormat("yyyyMMdd", self.date);
 								return $http
 										.get(
 												'ManufacOrderServlet?type=ManufacOrder&date='
-														+ self.dateString
+														+ dateString
 														+ '&DB=' + self.DB)
 										.then(
 												function(response) {
@@ -77,7 +79,7 @@ var dateInputExample = angular
 												});
 							};
 
-							getOrderInfos();
+							getOrderInfos(self.dateString);
 
 							self.filterOptions = function(day) { // 將傳入的參數收下來
 								return function(data) { // 將 data in
@@ -91,6 +93,20 @@ var dateInputExample = angular
 
 							};
 
+							
+							self.width = function(dayString) {
+
+								if (dayString == '日' || dayString == '六') {
+									return {
+										'width' : '7%'
+									};
+								} else {
+									return {
+										'width' : '17%'
+									};
+								}
+							};
+							
 							self.holidayOrNot = function(dayString) {
 
 								if (dayString == '日' || dayString == '六') {
@@ -114,11 +130,29 @@ var dateInputExample = angular
 									return false;
 								}
 							}
+							
+							
+							
+							self.lastMonth = function() {
+								 lastMonth = new Date(self.year,self.month-1,5);
+								 lastMonthString = dateFormat("yyyyMMdd", lastMonth);
+								 console.log(lastMonthString);
+								 $location.search('date', lastMonthString);
+								 location.reload();
+							}
+							
+							self.nextMonth = function() {
+								 nextMonth = new Date(self.year,self.month+1,5);
+								 nextMonthString = dateFormat("yyyyMMdd", nextMonth);
+								 console.log(nextMonthString);
+								 $location.search('date', nextMonthString);
+								 location.reload();
+							}
 
 						} ]);
 
 
-dateInputExample.factory();
+
 
 dateInputExample.controller('hrefController',	[ function() {
 	var self = this ;
