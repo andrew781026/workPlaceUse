@@ -23,36 +23,38 @@ import org.junit.runners.Parameterized.Parameters;
 
 import tw.com.riko.andrew.VO.ManufacOrderInfo;
 import tw.com.riko.andrew.VO.OrderInfo;
+import tw.com.riko.andrew.VO.OutfacOrderInfo;
 
-public class ManufacInfoDao implements IManufacInfo ,AutoCloseable{
+public class OutfacInfoDao implements IOrderInfo ,AutoCloseable{
 	
 	Connection con ;
 	PreparedStatement preparedStatement ;
 	ResultSet rs ;
 	
-	public ManufacInfoDao(Connection con) {
+	public OutfacInfoDao(Connection con) {
 		this.con = con ;
 	}
 	
 	@Override
-	public List<ManufacOrderInfo> listAllManufacOrderInfos() throws SQLException {
-		return this.listMonthlyManufacOrderInfos("",true);
+	public List<OrderInfo> listAllOrderInfos() throws SQLException {
+		return this.listMonthlyOrderInfos("",true);
 	}
 		
 	@Override
-	public List<ManufacOrderInfo> listMonthlyManufacOrderInfos(String monthDate) throws SQLException {
-		return this.listMonthlyManufacOrderInfos(monthDate,false);
+	public List<OrderInfo> listMonthlyOrderInfos(String monthDate) throws SQLException {
+		return this.listMonthlyOrderInfos(monthDate,false);
 	}
 	
-	public List<ManufacOrderInfo> listMonthlyManufacOrderInfos(String monthDate,boolean allOrNot) throws SQLException {
+	public List<OrderInfo> listMonthlyOrderInfos(String monthDate,boolean allOrNot) throws SQLException {
 		
-		List<ManufacOrderInfo> mInfos = new ArrayList<>();
+		List<OrderInfo> infos = new ArrayList<>();
 		
 		try {
 			
-			String sqlString = this.getSQLString("ManufacOrderInfos");	
+			String sqlString = this.getSQLString("OutFactoryOrderInfo");	
 			preparedStatement = con.prepareStatement(sqlString);
 			
+			// 判別要取得的是部分資料或某月的資料
 			if (allOrNot) {
 				preparedStatement.setString(1,"%");
 			} else {
@@ -75,11 +77,11 @@ public class ManufacInfoDao implements IManufacInfo ,AutoCloseable{
 				String productName =rs.getString(7);
 				int orderAmount = rs.getInt(5) ; 
 				int makedAmount = rs.getInt(6);				
-				int date =rs.getInt(3);		// 預計完工日	
+				int date =rs.getInt(3);		// 預計完工日
 								
-				ManufacOrderInfo mOrderInfo = new ManufacOrderInfo(orderID , productID , unit , productName , orderAmount , makedAmount , date );
+				OrderInfo orderInfo = new OutfacOrderInfo(orderID , productID , unit , productName , orderAmount , makedAmount , date );
 				
-				mInfos.add(mOrderInfo);
+				infos.add(orderInfo);
 			}
 			
 			
@@ -92,12 +94,12 @@ public class ManufacInfoDao implements IManufacInfo ,AutoCloseable{
 		}
 		
 		
-		return mInfos;
+		return infos ;
 	}
 	
 	private String getSQLString(String fileName) throws IOException{
 		
-		URL url = ManufacInfoDao.class.getResource(fileName + ".sql");
+		URL url = OutfacInfoDao.class.getResource(fileName + ".sql");
 		
 		FileReader fr = new FileReader(url.getFile());
 		BufferedReader br = new BufferedReader(fr);
@@ -117,24 +119,6 @@ public class ManufacInfoDao implements IManufacInfo ,AutoCloseable{
 	public void close() throws Exception {
 		if(preparedStatement !=null ) preparedStatement.close();
 		if(rs !=null ) rs.close();
-	}
-
-	@Override
-	public List<OrderInfo> listAllOrderInfos() throws SQLException {
-		List<OrderInfo> infos = new ArrayList<OrderInfo>() ;
-		for(OrderInfo info : this.listAllManufacOrderInfos()){
-			infos.add(info);
-		}
-		return infos ;
-	}
-
-	@Override
-	public List<OrderInfo> listMonthlyOrderInfos(String monthDate) throws SQLException {
-		List<OrderInfo> infos = new ArrayList<OrderInfo>() ;
-		for(OrderInfo info : this.listMonthlyManufacOrderInfos(monthDate)){
-			infos.add(info);
-		}
-		return infos ;
 	}
 
 }

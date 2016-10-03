@@ -12,6 +12,8 @@ public class ManufacInfoDaoFactory {
 		switch (DB) {
 			case "LJ":	return new ManufacInfoDaoProxy(DBNames.RIKO);
 			case "YC":	return new ManufacInfoDaoProxy(DBNames.YC);
+			case "¤O¬ì":	return new ManufacInfoDaoProxy(DBNames.RIKO);
+			case "¥Ã¹d":	return new ManufacInfoDaoProxy(DBNames.YC);
 			default : return null;
 		}
 		

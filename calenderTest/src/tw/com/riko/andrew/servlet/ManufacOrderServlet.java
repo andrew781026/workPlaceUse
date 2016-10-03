@@ -3,7 +3,9 @@ package tw.com.riko.andrew.servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,41 +18,54 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import tw.com.riko.andrew.DAO.IManufacInfo;
+import tw.com.riko.andrew.DAO.IOrderInfo;
 import tw.com.riko.andrew.DAO.ManufacInfoDaoFactory;
+import tw.com.riko.andrew.DAO.OutfacInfoDaoFactory;
 import tw.com.riko.andrew.VO.ManufacOrderInfo;
+import tw.com.riko.andrew.VO.OrderInfo;
 
-/**
- * Servlet implementation class ManufacOrderServlet
- */
+
 @WebServlet("/ManufacOrderServlet")
 public class ManufacOrderServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
     public ManufacOrderServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		//----取得 request的參數---------		
+		String monthDate = request.getParameter("date");
+		String type = request.getParameter("type");
+		String DB = request.getParameter("DB");
+		//---------------------------
+		
+		//-----設定response-------------------
 		response.setCharacterEncoding("UTF-8");
 		PrintWriter out = response.getWriter();
-		String monthDate = request.getParameter("date");
-		List<ManufacOrderInfo> mInfos;
-		IManufacInfo dao = ManufacInfoDaoFactory.getManufacInfoDao();
+		//----------------------------------
 		
+		List<OrderInfo> infos;
+		IOrderInfo dao = null;
 		
+		switch (type) {
+		case "manufactory":
+			dao = ManufacInfoDaoFactory.getManufacInfoDao(DB);	
+			break;
+		case "outerfactory":
+			dao = OutfacInfoDaoFactory.getOutfacInfoDao(DB);
+			break;
 
+		default:
+			System.out.println("Type param error");
+			break;
+		}
+		
+				
 		try {
-			mInfos = dao.listMonthlyManufacOrderInfos(monthDate);
-			
-			out.append("["+this.ManufacOrderInfosToJson(mInfos)+"]");
+			infos = dao.listMonthlyOrderInfos(monthDate);
+			// System.out.println(this.OrderInfosToJson(infos));
+			out.append("["+this.OrderInfosToJson(infos)+"]");
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -59,10 +74,8 @@ public class ManufacOrderServlet extends HttpServlet {
 		
 		out.close();
 	}
-
 	
-	
-	public static String ManufacOrderInfosToJson(List<ManufacOrderInfo> mInfos){
+	public static String OrderInfosToJson(List<OrderInfo> mInfos){
 		StringBuffer retrunJson = new StringBuffer() ;
 		int infoAmounts = mInfos.size();
 		int counter = 0 ;
@@ -72,10 +85,10 @@ public class ManufacOrderServlet extends HttpServlet {
 			return retrunJson.toString();
 		}
 		
-		for (ManufacOrderInfo manufacOrderInfo : mInfos) {
+		for (OrderInfo orderInfo : mInfos) {
 			
 			Gson gson = new Gson(); // Or use new GsonBuilder().create();
-			retrunJson.append(gson.toJson(manufacOrderInfo)); // serializes target to Json
+			retrunJson.append(gson.toJson(orderInfo)); // serializes target to Json
 			if(infoAmounts != ++counter){
 				retrunJson.append(",");
 			}
@@ -83,14 +96,15 @@ public class ManufacOrderServlet extends HttpServlet {
 		}
 		return retrunJson.toString();
 	}
-	
-	
-	
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		Map<String,String[]> map = request.getParameterMap();
+		System.out.println(map.size());
+		for (String key : map.keySet()) {
+			System.out.println("key="+key+";value="+map.get(key));
+		}
+		
 		doGet(request, response);
 	}
 

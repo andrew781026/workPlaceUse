@@ -11,35 +11,25 @@ import tw.com.riko.andrew.VO.OrderInfo;
 import tw.com.riko.andrew.util.DBUtil;
 import tw.com.riko.andrew.util.DBUtil.DBNames;
 
-public class ManufacInfoDaoProxy implements IManufacInfo{
+public class OutfacInfoDaoProxy implements IOrderInfo{
 
 	Connection con ;
-	ManufacInfoDao dao ;
+	OutfacInfoDao dao ;
 	
-	public ManufacInfoDaoProxy() {
+	public OutfacInfoDaoProxy() {
 		this(DBNames.RIKO);
 	}
 	
-	public ManufacInfoDaoProxy(DBNames db) {
+	public OutfacInfoDaoProxy(DBNames db) {
 		try {
 			con = DBUtil.getConnection(db);
-			dao = new ManufacInfoDao(con);
+			dao = new OutfacInfoDao(con);
 		} catch (SQLServerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
-	@Override
-	public List<ManufacOrderInfo> listAllManufacOrderInfos() throws SQLException {
-		return dao.listAllManufacOrderInfos();
-	}
-
-	@Override
-	public List<ManufacOrderInfo> listMonthlyManufacOrderInfos(String monthDate) throws SQLException {
-		return dao.listMonthlyManufacOrderInfos(monthDate);
-	}
-
 	@Override
 	public List<OrderInfo> listAllOrderInfos() throws SQLException {
 		return dao.listAllOrderInfos();

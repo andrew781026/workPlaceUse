@@ -1,10 +1,9 @@
-var dateInputExample = angular
-		.module('dateInputExample', [])
-		.controller(
+var orderInfosWithCalender = angular.module('dateInputExample', []);
+orderInfosWithCalender.controller(
 				'myDateController',
 				[
-						'$http','$location',
-						function($http,$location) {
+						'$http','$location','httpService',
+						function($http,$location,httpService) {
 							var self = this;
 
 							self.params = $location.search();
@@ -33,8 +32,25 @@ var dateInputExample = angular
 							self.weekDays = getWeeksInMonth(self.year,self.month);
 							
 							
+							self.types = [ 
+										{label : '製令單',id : '1',value:'manufactory'},
+										{label : '託工單',id : '2',value:'outerfactory'},
+										{label : '所有',id : '3',value:'ALL'},
+									];
+							self.type = self.types[2];
 							
-
+							self.checkHaveDataOrNot = function() {
+								infoNumbers = self.manufacOrderInfos.length + self.outFactoryOrderInfos.length ;
+								return infoNumbers == 0 ;
+							};
+							
+							self.orderInfos = [ self.manufacOrderInfos , self.outFactoryOrderInfos ];
+							self.manufacOrderInfos = [] ;
+							self.outFactoryOrderInfos = [] ;
+																					
+							
+							
+							/*************************************************************
 							self.orderInfos = [ {
 								id : '20160715000001',
 								productID : 'A0010010001',
@@ -52,24 +68,25 @@ var dateInputExample = angular
 								unit : 'pcs',
 								date : '2016'+self.dateString.substring(4,6)+'05'
 							} ];
+							*********************************************************/
 
-							// self.orderInfos = [] ;
 
-							self.checkHaveDataOrNot = self.orderInfos.length == 0;
+							
+
+							console.log(self.checkHaveDataOrNot());
 
 							var getOrderInfos = function(dateString) {
 								// var dateString = dateFormat("yyyyMMdd", self.date);
 								return $http
 										.get(
-												'ManufacOrderServlet?type=ManufacOrder&date='
+												'ManufacOrderServlet?type=manufactory&date='
 														+ dateString
 														+ '&DB=' + self.DB)
 										.then(
 												function(response) {
-													self.orderInfos = response.data;
+													self.manufacOrderInfos = response.data;
 
-													self.checkHaveDataOrNot = self.orderInfos.length == 0;
-													console.log(self.checkHaveDataOrNot);
+													console.log(self.checkHaveDataOrNot());
 													console.log(self.orderInfos.length);
 													console.log(self.orderInfos);
 
@@ -78,6 +95,34 @@ var dateInputExample = angular
 													console.log('Error while fetching notes');
 												});
 							};
+							
+							
+							var outerfactoryHttp = httpService.getHttpGet('outerfactory',self.dateString,self.DB);
+							// var outerfactoryHttp = httpService.getHttpGet(self.type.value,self.dateString,self.DB);
+							var manufactoryHttp = httpService.getHttpGet('manufactory',self.dateString,self.DB);
+							
+							outerfactoryHttp.success(function(data,status) {
+								self.outFactoryOrderInfos = data;
+							});
+							
+							
+							self.dataReGet = function() {
+								
+								if(self.type.label == '所有'){
+									manufactoryHttp.success(function(data,status) {self.manufacOrderInfos = data;});
+									outerfactoryHttp.success(function(data,status) {self.outFactoryOrderInfos = data;});
+								}else if (self.type.label == '製令單') {
+									manufactoryHttp.success(function(data,status) {self.manufacOrderInfos = data;});
+									self.outFactoryOrderInfos = [];
+								}else if (self.type.label == '託工單') {
+									self.manufacOrderInfos = [];
+									outerfactoryHttp.success(function(data,status) {self.outFactoryOrderInfos = data;});
+								}
+								
+								console.log(self.orderInfos);
+								
+							}
+							
 
 							getOrderInfos(self.dateString);
 
@@ -119,6 +164,10 @@ var dateInputExample = angular
 									};
 								}
 							};
+							
+							
+							
+							
 
 							self.dayInMonthOrNot = function(year, month, date) {
 								var firstDate = new Date(year, month, 1), lastDate = new Date(
@@ -154,11 +203,26 @@ var dateInputExample = angular
 
 
 
-dateInputExample.controller('hrefController',	[ function() {
+orderInfosWithCalender.controller('hrefController',	[ function() {
 	var self = this ;
 	self.lastMonth = function() {
 		self.dateString = $location.search().date ;
 	}
+}]);
+
+orderInfosWithCalender.factory('httpService', ['$http',function($http) {
+	
+	var factory = {} ;
+	
+	factory.getHttpGet = function(type,dateString,DB){
+		// return $http.post('ManufacOrderServlet',{'type':type,'date':dateString,'DB':DB});
+		return $http.get('ManufacOrderServlet?type='+type+'&date='+ dateString + '&DB=' + DB);
+		
+	}
+	
+	return factory ;
+	
+	
 }]);
 
 

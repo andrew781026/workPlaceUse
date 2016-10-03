@@ -1,9 +1,4 @@
 
-
-} ]);
-
-
-
 function dateFormat(format,date){
 	var dayString ;
 	if(format==="yyyyMMdd")	dayString = date.toISOString().substring(0, 4)+date.toISOString().substring(5, 7)+date.toISOString().substring(8,10);
