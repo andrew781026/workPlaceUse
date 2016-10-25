@@ -1,12 +1,39 @@
 
+function OpenNewWindow( URL , window_name , window_width , window_height ) {
+	
+	var positionX = ( screen.width - window_width ) / 2 ;
+	var positionY = ( screen.height - window_height ) / 2 ;
+	
+	features = "width="+window_width+",height="+window_height+",top="+positionY+",left="+positionX;
+	var newWindow = window.open(URL, window_name, features);
+	
+}
+
+
 function dateFormat(format,date){
 	var dayString ;
-	if(format==="yyyyMMdd")	dayString = date.toISOString().substring(0, 4)+date.toISOString().substring(5, 7)+date.toISOString().substring(8,10);
+	if(format==="yyyyMMdd"){	
+		dayString = date.toISOString().substring(0, 4)+date.toISOString().substring(5, 7)+date.toISOString().substring(8, 10);
+	}	
 	
 	return dayString ;
 }
 
-
+function numberFormat(digit,number){
+	
+	var length = number.toString().length ;
+	var zeroString = '' ;
+	var returnString = '' ;
+	
+	for (var int = 0; int < digit; int++) {
+		zeroString = zeroString + 0 ;
+	}
+	
+	
+	returnString = ( zeroString + number ).slice(length, digit+length) ;
+	
+	return returnString ;
+}
 
 // note: month is 0 based, just like Dates in js
 function getWeeksInMonth(year, month) {

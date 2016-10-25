@@ -4,7 +4,7 @@
 <%@ page language= "java" contentType ="text/html; charset=UTF-8"
     pageEncoding="UTF-8" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd" >
-<html ng-app='datasApp' >
+<html >
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>日曆格式未交製令</title >
@@ -25,7 +25,7 @@
 
 
 </head>
-<body ng-controller="MainCtrl as ctrl">
+<body ng-app='datasApp' ng-controller="MainCtrl as ctrl"  >
 
 		<%!
 		

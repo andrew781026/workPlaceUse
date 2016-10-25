@@ -2,21 +2,27 @@ package tw.com.riko.andrew.VO;
 
 
 public class OrderInfo {
-	private String orderID , productID , unit ,productName;
+	private String orderID , productID , unit ,productName , factoryName ;
 	private int orderAmount , makedAmount, date  ;
 	
-	public OrderInfo(String orderID ,String productID ,String unit ,String productName ,int orderAmount ,int makedAmount ,int date ) {
-		this.orderID = orderID ; //單據編號
-		this.productID = productID ;//品號 
-		this.unit = unit ; //單位
-		this.productName = productName ; //品名
-		this.orderAmount = orderAmount ; //批量-預計生產量
-		this.makedAmount = makedAmount ; //已生產數量
-		this.date = date ; 
+	public OrderInfo(String orderID ,String productID ,String unit ,String productName ,String factoryName ,int orderAmount ,int makedAmount ,int date ) {
+		this.orderID = orderID ; // 單據編號
+		this.productID = productID ;// 品號 
+		this.unit = unit ; // 單位
+		this.productName = productName ; // 品名
+		this.orderAmount = orderAmount ; // 預計生產量 or 訂單數量
+		this.makedAmount = makedAmount ; // 已生產量 or 已交量
+		this.date = date ; // 預交日期
+		this.factoryName = factoryName ; // 廠商名
 	}
 	
 	
-	
+	public String getFactoryName() {
+		return factoryName;
+	}
+	public void setFactoryName(String factoryName) {
+		this.factoryName = factoryName;
+	}
 	public String getOrderID() {
 		return orderID;
 	}

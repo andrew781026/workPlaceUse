@@ -11,7 +11,7 @@ public class DBUtil {
 	public static final String JDBC_URL = "" ;
 	
 	public enum DBNames{		
-		RIKO("LJ"),YC("YC");
+		RIKO("LJ"),YC("YC"),ACC("ACC");
 		
 		private String DB ;	
 		
@@ -32,16 +32,26 @@ public class DBUtil {
 	public static Connection getConnection(DBNames DB) throws SQLServerException{
 		
         SQLServerDataSource ds = new SQLServerDataSource();  
-        ds.setUser("zc_own");  
-        ds.setPassword("Z334");  
+        ds.setUser("*********");  
+        ds.setPassword("**********");  
         ds.setServerName("riko-erp");  
         ds.setPortNumber(1433);   
         ds.setDatabaseName(DB.getDBString());     
         
-        //-----------以下設定ds------------------
         
         
-        //------------------------------------
+		return ds.getConnection();
+		
+	}
+	
+	public static Connection getAdminConnection(DBNames DB) throws SQLServerException{
+		
+        SQLServerDataSource ds = new SQLServerDataSource();  
+        ds.setUser("******");  
+        ds.setPassword("***************************");  
+        ds.setServerName("riko-erp");  
+        ds.setPortNumber(1433);   
+        ds.setDatabaseName(DB.getDBString());
         
 		return ds.getConnection();
 		

@@ -8,7 +8,7 @@ import java.net.URL;
 public class FileUtil {
 
 	
-	public String getSQLString(URL url) throws IOException{
+	public static String getSQLString(URL url) throws IOException{
 		
 		// URL url = ManufacInfoDao.class.getResource(fileName + ".sql");
 		

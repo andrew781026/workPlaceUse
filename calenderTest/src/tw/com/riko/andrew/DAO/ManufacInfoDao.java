@@ -44,18 +44,20 @@ public class ManufacInfoDao implements IManufacInfo ,AutoCloseable{
 		return this.listMonthlyManufacOrderInfos(monthDate,false);
 	}
 	
-	public List<ManufacOrderInfo> listMonthlyManufacOrderInfos(String monthDate,boolean allOrNot) throws SQLException {
+	public List<ManufacOrderInfo> listMonthlyManufacOrderInfos(String monthDate,boolean allOrMonthly) throws SQLException {
 		
 		List<ManufacOrderInfo> mInfos = new ArrayList<>();
 		
 		try {
 			
-			String sqlString = this.getSQLString("ManufacOrderInfos");	
+			String sqlString = this.getSQLString("sql/ManufacOrderInfos");	
 			preparedStatement = con.prepareStatement(sqlString);
 			
-			if (allOrNot) {
+			if (allOrMonthly) {
+				// get all data
 				preparedStatement.setString(1,"%");
 			} else {
+				// get monthly data with monthDate
 				Calendar cal = Calendar.getInstance();
 				String year = monthDate.substring(0, 4);
 				String month = monthDate.substring(4, 6);
@@ -71,13 +73,14 @@ public class ManufacInfoDao implements IManufacInfo ,AutoCloseable{
 				
 				String orderID = rs.getString(1) ; 
 				String productID = rs.getString(4) ; 
-				String unit =rs.getString(8);
-				String productName =rs.getString(7);
+				String unit = rs.getString(8);
+				String factoryName = rs.getString(9);
+				String productName = rs.getString(7);
 				int orderAmount = rs.getInt(5) ; 
 				int makedAmount = rs.getInt(6);				
-				int date =rs.getInt(3);		// 預計完工日	
+				int date =rs.getInt(3);		// �w�p���u�闥	
 								
-				ManufacOrderInfo mOrderInfo = new ManufacOrderInfo(orderID , productID , unit , productName , orderAmount , makedAmount , date );
+				ManufacOrderInfo mOrderInfo = new ManufacOrderInfo(orderID , productID , unit , productName , factoryName , orderAmount , makedAmount , date );
 				
 				mInfos.add(mOrderInfo);
 			}
@@ -120,21 +123,13 @@ public class ManufacInfoDao implements IManufacInfo ,AutoCloseable{
 	}
 
 	@Override
-	public List<OrderInfo> listAllOrderInfos() throws SQLException {
-		List<OrderInfo> infos = new ArrayList<OrderInfo>() ;
-		for(OrderInfo info : this.listAllManufacOrderInfos()){
-			infos.add(info);
-		}
-		return infos ;
+	public List<? extends OrderInfo> listAllOrderInfos() throws SQLException {
+		return this.listAllManufacOrderInfos() ;
 	}
 
 	@Override
-	public List<OrderInfo> listMonthlyOrderInfos(String monthDate) throws SQLException {
-		List<OrderInfo> infos = new ArrayList<OrderInfo>() ;
-		for(OrderInfo info : this.listMonthlyManufacOrderInfos(monthDate)){
-			infos.add(info);
-		}
-		return infos ;
+	public List<? extends OrderInfo> listMonthlyOrderInfos(String monthDate) throws SQLException {
+		return this.listMonthlyManufacOrderInfos(monthDate) ;
 	}
 
 }

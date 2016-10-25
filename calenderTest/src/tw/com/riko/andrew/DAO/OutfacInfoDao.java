@@ -51,10 +51,10 @@ public class OutfacInfoDao implements IOrderInfo ,AutoCloseable{
 		
 		try {
 			
-			String sqlString = this.getSQLString("OutFactoryOrderInfo");	
+			String sqlString = this.getSQLString("sql/OutFactoryOrderInfos");	
 			preparedStatement = con.prepareStatement(sqlString);
 			
-			// 判別要取得的是部分資料或某月的資料
+			// �P�O���X������ƩάY����
 			if (allOrNot) {
 				preparedStatement.setString(1,"%");
 			} else {
@@ -73,13 +73,14 @@ public class OutfacInfoDao implements IOrderInfo ,AutoCloseable{
 				
 				String orderID = rs.getString(1) ; 
 				String productID = rs.getString(4) ; 
-				String unit =rs.getString(8);
-				String productName =rs.getString(7);
+				String unit = rs.getString(8);
+				String productName = rs.getString(7);
+				String factoryName = rs.getString(9);
 				int orderAmount = rs.getInt(5) ; 
 				int makedAmount = rs.getInt(6);				
-				int date =rs.getInt(3);		// 預計完工日
+				int date =rs.getInt(3);		// �w�p���u�闥
 								
-				OrderInfo orderInfo = new OutfacOrderInfo(orderID , productID , unit , productName , orderAmount , makedAmount , date );
+				OrderInfo orderInfo = new OutfacOrderInfo(orderID , productID , unit , productName , factoryName , orderAmount , makedAmount , date );
 				
 				infos.add(orderInfo);
 			}

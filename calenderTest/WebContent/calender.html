@@ -17,14 +17,22 @@
              background-color: lime ;
       }
 </style>
+
 <script type="text/javascript" src="js/new_app.js"></script>
+<script type="text/javascript" src="js/utils.js"></script>
 
 </head>
 <body ng-app="dateInputExample" >
 <div ng-controller="myDateController as dateCtrl" >
 	   <div>
 	   	 	<button ng-click="dateCtrl.lastMonth()" >上個月</button>
-	   		力科製令未交明細行事曆
+	   		<B>
+	   			<span style="display:inline-block;width: 16px"></span>
+	   			
+	   			<select ng-options="db.label for db in dateCtrl.DBs" ng-model="dateCtrl.database" ng-change="dateCtrl.changeDB()" ></select>
+	   			訂單製令未交明細行事曆 {{dateCtrl.year}} 年 {{dateCtrl.month+1}} 月
+	   			
+	   		</b> 
 	   		<button ng-click="dateCtrl.nextMonth()" >下個月</button>
 
 			<select ng-options="c.label for c in dateCtrl.types" ng-model="dateCtrl.type" ng-change="dateCtrl.dataReGet()" >
@@ -36,8 +44,8 @@
 	            
 		<thead>
 			<tr style="font-size:20px;">
-				<th ng-repeat="string in dateCtrl.weekString" ng-style="dateCtrl.width(string)" >
-					<span ng-bind="string" ng-style="dateCtrl.holidayOrNot(string)"></span>
+				<th ng-repeat="string in dateCtrl.weekString" ng-style="dateCtrl.holidayStyle(string)" >
+					<span ng-bind="string" ng-style="dateCtrl.holidayStyle(string)"></span>
 				</th>
 			</tr>
 		</thead>
@@ -48,15 +56,27 @@
 						<div align="center" style="background-color: pink;font-size:16px;" ng-bind="day | date:'yyyy/MM/dd'" ></div>
 						<div ng-show="dateCtrl.checkHaveDataOrNot()"><img src="img/loading.gif">資料讀取中...</div>
 	                         	<div ng-hide="dateCtrl.checkHaveDataOrNot()">
-		                                  <div style="font-size:1em;">未完工製令：</div>
-		                                  <div style="font-size:0.7em;" ng-repeat="data in dateCtrl.manufacOrderInfos | filter:dateCtrl.filterOptions(day) ">                                           			
-		                                        [<span style="color:red;">{{data.productName}}</span>] 未交數量：{{data.orderAmount-data.makedAmount}}{{data.unit}}<br><br>
+	                         		<div ng-hide="dateCtrl.manufacOrderInfos.length==0">
+		                                  <div style="font-size:1.1em;font-weight:bold;" >未完工製令：</div><br>
+		                                  <div style="font-size:0.8em;" ng-repeat="data in dateCtrl.manufacOrderInfos | filter:dateCtrl.filterOptions(day) ">                                           			
+		                                        [<span style="color:blue;">{{data.productName}}</span>] 未交數量：{{data.orderAmount - data.makedAmount}}{{data.unit}}<br><br>
 		                                  </div> 
 		                                  <br><br><br>
-		                                  <div style="font-size:1em;">未完工託工：</div>
-		                                  <div style="font-size:0.7em;" ng-repeat="data in dateCtrl.outFactoryOrderInfos | filter:dateCtrl.filterOptions(day) ">                                           			
-		                                        [<span style="color:red;">{{data.productName}}</span>] 未交數量：{{data.orderAmount-data.makedAmount}}{{data.unit}}<br><br>
+		                            </div>
+		                            <div ng-hide="dateCtrl.outFactoryOrderInfos.length==0">
+		                                  <div style="font-size:1.1em;font-weight:bold;">未完工託工：</div><br>
+		                                  <div style="font-size:0.8em;" ng-repeat="data in dateCtrl.outFactoryOrderInfos | filter:dateCtrl.filterOptions(day) ">                                           			
+		                                        [<span style="color:blue;">{{data.productName}}</span>] 未交數量：{{data.orderAmount - data.makedAmount}}{{data.unit}}<br><br>
 		                                  </div> 
+		                                  <br><br><br>
+                                    </div>
+                                    <div ng-hide="dateCtrl.purchOrderInfos.length==0">
+		                                  <div style="font-size:1.1em;font-weight:bold;">未結採購單：</div><br>
+		                                  <div style="font-size:0.8em;" ng-repeat="data in dateCtrl.purchOrderInfos | filter:dateCtrl.filterOptions(day) ">                                           			
+		                                        {{data.factoryName}}[<a href="" ng-click="dateCtrl.gotoChangeDate(data.orderID,data.serialNO,data.productID)">{{data.productName}}</a>] 
+		                                                                                                                        數量：{{data.orderAmount}}{{data.unit}} 已收：{{data.makedAmount}}<br><br>
+		                                  </div>
+                                    </div> 
 	                            </div> 
 	                </div> 
 				</td>

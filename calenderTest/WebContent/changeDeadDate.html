@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>採購單預交日期修改</title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+
+<style type="text/css" >
+      
+      table{
+      
+        border-spacing:1;
+      	border-collapse: collapse;
+      	border:1;
+      	border-color:#CCCCCC;
+      	width: 100%;
+      
+      }
+      
+       th {             
+             height: 10px ;
+             background-color: lime ;
+      }
+</style>
+
+<script type="text/javascript" src="js/changeDeadDate.js"></script>
+<script type="text/javascript" src="js/utils.js"></script>
+
+</head>
+<body ng-app="changeDate" ng-controller="purchOrderController as pCtrl">
+
+<div>
+	<div>採購單號：{{pCtrl.purchOrderInfos.orderID}}</div>
+	<div>品號：{{pCtrl.purchOrderInfos.productID}}</div>
+	<div>品名：{{pCtrl.purchOrderInfos.productName}}</div>
+	<div>未交數量：{{pCtrl.purchOrderInfos.orderAmount - pCtrl.purchOrderInfos.makedAmount}}</div>
+	<div>預交日期(yyyy/MM/dd)：{{pCtrl.purchOrderInfos.date}}</div>
+</div>
+
+<div ng-controller="factoryController as fCtrl">
+	廠商資訊：{{pCtrl.factoryInfos.factoryID}} {{pCtrl.factoryInfos.factoryShortName}} 
+	聯絡人：{{pCtrl.factoryInfos.contact_Person}} 
+	聯絡電話：{{pCtrl.factoryInfos.officePhoneNO}} 
+	聯絡人手機：{{pCtrl.factoryInfos.cellPhoneNO}} 
+</div>
+<br/><br/>
+修改預交日期：
+<input type="date" id="deadDate" ng-model="pCtrl.deadDate" value="2016-10-08"><button ng-click="pCtrl.updateDeadDay(pCtrl.deadDate)">提交</button>
+<br/><br/><br/><br/>
+
+<table ng-controller="orderFilterWithProductIDController as orderCtrl">
+	<thead>
+		<tr>
+			<th ng-repeat="title in orderCtrl.titles track by $index" ng-bind="title"></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="purchInfos in orderCtrl.purchOrderInfos" >
+			<td ng-bind="purchInfos.productID"></td>
+			<td ng-bind="purchInfos.productName"></td>
+			<td ng-bind="purchInfos.orderAmount - purchInfos.makedAmount"></td>
+			<td ng-bind="purchInfos.orderID"></td>
+			<td ng-bind="purchInfos.serialNO | numberFixedLen:3"></td>
+		</tr>
+	</tbody>
+</table>
+
+</body>
+</html>

@@ -6,6 +6,6 @@ import java.util.List;
 import tw.com.riko.andrew.VO.OrderInfo;
 
 public interface IOrderInfo {
-	public List<OrderInfo> listAllOrderInfos() throws SQLException;	
-	List<OrderInfo> listMonthlyOrderInfos(String monthDate) throws SQLException;
+	public List<? extends OrderInfo> listAllOrderInfos() throws SQLException;	
+	List<? extends OrderInfo> listMonthlyOrderInfos(String monthDate) throws SQLException;
 }
