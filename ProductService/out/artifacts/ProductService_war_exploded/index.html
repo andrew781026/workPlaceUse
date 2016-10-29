@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>某品號所有庫別存量</title>
+
+
+    <script src="js/angular-1.5.7.min.js"></script>
+    <script src="js/app.js"></script>
+
+</head>
+<body ng-app="productApp">
+
+
+<div ng-controller="singleProduct as ctrl">
+    重覆出現直到所有庫存量顯示完畢(某品號)
+
+    <div ng-repeat="product in ctrl.products" >
+        品名:<span ng-bind="product.productName" ></span><br>
+        品號:<span ng-bind="product.productID" ></span><br>
+        儲位:<span ng-bind="product.storagePlace" ></span><br>
+        單位:<span ng-bind="product.unit" ></span><br><hr>
+        倉別 實際在庫量
+        <div ng-repeat="amount in product.MAP">
+            <span style="color: red" ng-bind="amount.warehouseID"></span> {{amount.warehouseName}}
+            {{amount.amountInWarehouse}}
+        </div>
+    </div>
+
+
+</div>
+
+
+</body>
+</html>

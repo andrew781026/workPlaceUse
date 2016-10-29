@@ -1,0 +1,5 @@
+"warehouseAmountMap":{
+    "tw.com.riko.andrew.VO.Warehouse@7eeab28b":
+        {"warehouse":{"id":"S002","name":"材料倉","note":"專門放材料的地方"},"借出數量":55.0,"借入數量":6.0,"實際在庫數量":9.0
+    }
+}
